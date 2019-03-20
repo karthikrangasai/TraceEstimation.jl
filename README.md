@@ -1,1 +1,1 @@
-# tarceEstimation.jl
+# TraceEstimation.jl
