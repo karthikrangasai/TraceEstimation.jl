@@ -74,10 +74,3 @@ function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
 
     return trace
 end
-
-A = [1 0 0; 0 2 0; 0 0 3]
-f(x) = x^2
-m = 5
-nv = 5
-
-tr = slq(A, f, m, nv)
