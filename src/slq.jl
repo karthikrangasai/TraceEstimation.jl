@@ -81,6 +81,3 @@ m = 5
 nv = 5
 
 tr = slq(A, f, m, nv)
-
-print(tr)
-print("\n")

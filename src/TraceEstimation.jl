@@ -5,8 +5,6 @@ using Trace Estimation Techniques
 
 module TraceEstimation
 
-greet() = print("Hello World!")
-
 include("slq.jl")
 
-end # module
+end 
