@@ -1,0 +1,4 @@
+name = "TraceEstimation"
+uuid = "0e5ddcfe-4b0a-11e9-2374-198142ea3168"
+authors = ["karthikrangasai <karthikrangasai@gmail.com>"]
+version = "0.1.0"
