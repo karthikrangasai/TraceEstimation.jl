@@ -69,5 +69,5 @@ function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
         end
     end
 
-    return trace
+    return (size(A, 1)/nv) * trace
 end
