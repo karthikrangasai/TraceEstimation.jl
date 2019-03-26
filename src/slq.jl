@@ -48,16 +48,7 @@ function lanczos(A, x, m)
         #     break
         # end
     end
-    print(typeof(Alpha))
-    print("\n")
-    print(typeof(Beta))
-    print("\n")
-    print("About to Compute T")
-    print("\n")
-    print("\n")
-    # T = Tridiagonal(Beta, Alpha, Beta)
     T = SymTridiagonal(Alpha, Beta)
-    print(typeof(T))
     return T
 end
 
@@ -69,11 +60,7 @@ function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
     for i = 1:nv
         vl = randomRademacherVector(size(A,2))
         T = lanczos(A, vl, m)
-        print("\n")
-        print("\n")
-        print("T is done \n Now eigen")
-        print("\n")
-        print("\n")
+
         Y = eigvecs(T)
         theta = eigvals(T)
 
