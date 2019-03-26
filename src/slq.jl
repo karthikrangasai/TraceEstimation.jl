@@ -12,46 +12,52 @@ end
 Generating a random vector based on Rademacher Distribution
 """
 function randomRademacherVector(x::Int64)
-    mp = [-1 1];
-    v = rand(1,x);
-
-    for i = range(1, length = x)
-        v[i] = mp[(v[i] < 0.5) + 1];
-    end
-
-    return v
+    return rand(-1.0:2.0:1.0, x)
 end
 
 """
 Lanczos function for eigen vlaues
 """
 function lanczos(A, x, m)
-    q = (x/norm(x))'
-    Q = hcat(q)
-    r = A*q
-    alpha = q' * r
-    r = r - alpha .* q
-    beta = norm(r)
+    q = (x/norm(x))
+    r = similar(q)
 
-    Alpha = alpha
-    Beta = [beta]
+    mul!(r,A,q)
+    alpha = q' * r
+    
+    r = r - alpha .* q
+    
+    Alpha = Vector{Float64}(undef, (m+1))
+    Beta = Vector{Float64}(undef, m)
+    Alpha[1] = alpha
 
     for j = 2:(m+1)
+        Beta[j-1] = norm(r)
         v = q
-        q = r/beta
-        Q = hcat(Q,q)
-        Alpha = vcat(Alpha, alpha)
-        Beta = vcat(Beta, beta)
-        r = A*q - beta .* v
+        q = r/(Beta[j-1])
+
+        mul!(r, A, q)
+        r .-= Beta[j-1] .* v
         alpha = q' * r
+
         r = r - alpha .* q
-        beta = norm(r)
-        if beta == 0
-            break
-        end
+        # beta = norm(r)
+        
+        Alpha[j] = alpha
+        # if beta == 0
+        #     break
+        # end
     end
-    Alpha = vec(Alpha)
-    T = diagm(-1=>Beta, 0=>Alpha, 1=>Beta)
+    print(typeof(Alpha))
+    print("\n")
+    print(typeof(Beta))
+    print("\n")
+    print("About to Compute T")
+    print("\n")
+    print("\n")
+    # T = Tridiagonal(Beta, Alpha, Beta)
+    T = SymTridiagonal(Alpha, Beta)
+    print(typeof(T))
     return T
 end
 
@@ -63,7 +69,11 @@ function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
     for i = 1:nv
         vl = randomRademacherVector(size(A,2))
         T = lanczos(A, vl, m)
-
+        print("\n")
+        print("\n")
+        print("T is done \n Now eigen")
+        print("\n")
+        print("\n")
         Y = eigvecs(T)
         theta = eigvals(T)
 
