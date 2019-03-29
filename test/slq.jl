@@ -16,7 +16,7 @@ function signCheck(eMax::Float64, eMin::Float64)
     if sign(eMax) == sign(eMin)
         return true
     else
-        retuen false
+        return false
     end
 end
 
