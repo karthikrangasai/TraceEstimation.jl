@@ -26,7 +26,7 @@ end
 @testset "Testing Stochastic Lanczos Quadrature" begin
     @testset "Testing for Dense Matrices" begin
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = 1/x" for
-            n in (500, 1000, 5000)
+            n in (500, 1000)
             
             A = rand(n, n)
             testMatrix = A + A' + n*I
@@ -47,16 +47,17 @@ end
             
             @time computed = TraceEstimation.slq(testMatrix, f, m, nv)
             @time actual = tr(inv(testMatrix))
-            
+            print("Trace computed using the algorithm :  ")
             print(computed)
             print("\n")
+            print("Trace computed using tr(inv(A)) :  ")
             print(actual)
             print("\n")
             @test isapprox(computed, actual, rtol=1)
         end
 
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = x^2" for
-            n in (500, 1000, 5000)
+            n in (500, 1000)
                 
             A = rand(n, n)
             testMatrix = A + A' + n*I
@@ -78,8 +79,10 @@ end
             @time computed = TraceEstimation.slq(testMatrix, g, m, nv)
             @time actual = tr(g(testMatrix))
 
+            print("Trace computed using the algorithm :  ")
             print(computed)
             print("\n")
+            print("Trace computed using tr(f(A)) :  ")            
             print(actual)
             print("\n")
             @test isapprox(computed, actual, rtol=1)
@@ -108,8 +111,10 @@ end
             @time computed = TraceEstimation.slq(testMatrix, h, m, nv)
             @time actual = tr(h(testMatrix))
 
+            print("Trace computed using the algorithm :  ")
             print(computed)
             print("\n")
+            print("Trace computed using tr(f(A)) :  ")
             print(actual)
             print("\n")
             @test isapprox(computed, actual, rtol=1)
