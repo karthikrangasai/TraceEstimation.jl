@@ -26,7 +26,7 @@ end
 @testset "Testing Stochastic Lanczos Quadrature" begin
     @testset "Testing for Dense Matrices" begin
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = 1/x" for
-            n in (500, 1000, 5000, 8000) # 500
+            n in (500, 1000, 5000)
             
             A = rand(n, n)
             testMatrix = A + A' + n*I
@@ -40,8 +40,8 @@ end
             rho = (sqrt(condNum) + 1)/(sqrt(condNum) - 1)
 
             m = Int64(ceil((sqrt(condNum) * log(K/epsilon)) / 4))
-            # nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
-            nv = 2*m - 1
+            nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
+            # nv = 2*m - 1
             # m = 50
             # nv = 100
             
@@ -56,7 +56,7 @@ end
         end
 
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = x^2" for
-            n in (500, 1000, 5000, 8000) # 500
+            n in (500, 1000, 5000)
                 
             A = rand(n, n)
             testMatrix = A + A' + n*I
@@ -70,8 +70,8 @@ end
             rho = (sqrt(condNum) + 1)/(sqrt(condNum) - 1)
 
             m = Int64(ceil((sqrt(condNum) * log(K/epsilon)) / 4))
-            # nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
-            nv = 2*m - 1
+            nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
+            # nv = 2*m - 1
             # m = 50
             # nv = 100
             
@@ -86,7 +86,7 @@ end
         end
 
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = exp(x/10)" for
-            n in (500, 1000, 5000, 8000) # 500
+            n in (500, 1000)
                 
             A = rand(n, n)
             testMatrix = A + A' + n*I
@@ -100,8 +100,8 @@ end
             rho = (sqrt(condNum) + 1)/(sqrt(condNum) - 1)
 
             m = Int64(ceil((sqrt(condNum) * log(K/epsilon)) / 4))
-            # nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
-            nv = 2*m - 1
+            nv = Int64(ceil((24 * log(2/neta)) / (epsilon^2)))
+            # nv = 2*m - 1
             # m = 50
             # nv = 100
             
