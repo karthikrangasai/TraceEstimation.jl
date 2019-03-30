@@ -66,10 +66,8 @@ function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
             theta = eigvals(T)
 
             # for k = 1:size(theta,1)
-            for k = 1:m
-                # trace = trace + Y[1,k]^2 * f(theta[k])
-                # trace = trace + Y[k,k] * f(theta[k])
-                trace = trace + ((basisVec(size(Y[:,k],1),1))' * Y[:,k])^2 * f(theta[k])
+            for k = 1:(m+1)
+                trace = trace + Y[1,k]^2 * f(theta[k])
             end
         end
         return (size(A, 1)/nv) * trace
