@@ -1,3 +1,3 @@
-using Test
+import Test
 
 include("slq.jl")
