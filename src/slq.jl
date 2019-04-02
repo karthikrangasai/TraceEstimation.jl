@@ -11,47 +11,42 @@ end
 """
 Generating a random vector based on Rademacher Distribution
 """
-function randomRademacherVector(x::Int64)
-    mp = [-1 1];
-    v = rand(1,x);
-
-    for i = range(1, length = x)
-        v[i] = mp[(v[i] < 0.5) + 1];
-    end
-
-    return v
+function randomRademacherVector(x::Int64, T::Type)
+    o = one(T)
+    t = 2*o
+    return rand(-o:t:o, x)
 end
 
 """
 Lanczos function for eigen vlaues
 """
 function lanczos(A, x, m)
-    q = (x/norm(x))'
-    Q = hcat(q)
-    r = A*q
-    alpha = q' * r
-    r = r - alpha .* q
-    beta = norm(r)
+    q = (x/norm(x))
+    r = similar(q)
 
-    Alpha = alpha
-    Beta = [beta]
+    mul!(r,A,q)
+    alpha = q' * r
+    
+    r = r - alpha .* q
+    
+    Alpha = Vector{Float64}(undef, (m+1))
+    Beta = Vector{Float64}(undef, m)
+    Alpha[1] = alpha
 
     for j = 2:(m+1)
+        Beta[j-1] = norm(r)
         v = q
-        q = r/beta
-        Q = hcat(Q,q)
-        Alpha = vcat(Alpha, alpha)
-        Beta = vcat(Beta, beta)
-        r = A*q - beta .* v
+        q = r/(Beta[j-1])
+
+        mul!(r, A, q)
+        r .-= Beta[j-1] .* v
         alpha = q' * r
-        r = r - alpha .* q
-        beta = norm(r)
-        if beta == 0
-            break
-        end
+
+        r .= r .- alpha .* q
+        
+        Alpha[j] = alpha
     end
-    Alpha = vec(Alpha)
-    T = diagm(-1=>Beta, 0=>Alpha, 1=>Beta)
+    T = SymTridiagonal(Alpha, Beta)
     return T
 end
 
@@ -59,18 +54,22 @@ end
 Actual Algorithm Implementataion
 """
 function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
-    trace = 0
-    for i = 1:nv
-        vl = randomRademacherVector(size(A,2))
-        T = lanczos(A, vl, m)
+    if !(isposdef(A))
+        throw("Matrix passed is not a Positive Semi-Definite Martix")
+    else
+        trace = 0
+        for i = 1:nv
+            vl = randomRademacherVector(size(A,2), Float64)
+            T = lanczos(A, vl, m)
 
-        Y = eigvecs(T)
-        theta = eigvals(T)
+            Y = eigvecs(T)
+            theta = eigvals(T)
 
-        for k = 1:size(theta,1)
-            trace = trace + ((basisVec(size(Y[:,k],1),1))' * Y[:,k])^2 * f(theta[k])
+            # for k = 1:size(theta,1)
+            for k = 1:(m+1)
+                trace = trace + Y[1,k]^2 * f(theta[k])
+            end
         end
+        return (size(A, 1)/nv) * trace
     end
-
-    return trace
 end
