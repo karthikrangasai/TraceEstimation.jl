@@ -53,7 +53,8 @@ end
             print("Trace computed using tr(inv(A)) :  ")
             print(actual)
             print("\n")
-            @test isapprox(computed, actual, rtol=1)
+            @test isapprox(computed, actual, rtol=10^-4)
+            # @test isapprox(computed, actual)
         end
 
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = x^2" for
@@ -85,7 +86,8 @@ end
             print("Trace computed using tr(f(A)) :  ")            
             print(actual)
             print("\n")
-            @test isapprox(computed, actual, rtol=1)
+            @test isapprox(computed, actual, rtol=10^-4)
+            # @test isapprox(computed, actual)
         end
 
         @testset "For Symmetric Matrices of size ($n, $n) with analytic function f(x) = exp(x/10)" for
@@ -117,7 +119,8 @@ end
             print("Trace computed using tr(f(A)) :  ")
             print(actual)
             print("\n")
-            @test isapprox(computed, actual, rtol=1)
+            @test isapprox(computed, actual, rtol=10^-2)
+            # @test isapprox(computed, actual)
         end
     end
 end

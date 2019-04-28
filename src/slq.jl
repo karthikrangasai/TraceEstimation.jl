@@ -2,13 +2,6 @@ using Random
 using LinearAlgebra
 
 """
-Basis Vector = ej
-"""
-function basisVec(l, i)
-    return vcat(zeros(i-1), 1.0, zeros(l-i))
-end
-
-"""
 Generating a random vector based on Rademacher Distribution
 """
 function randomRademacherVector(x::Int64, T::Type)
@@ -18,7 +11,7 @@ function randomRademacherVector(x::Int64, T::Type)
 end
 
 """
-Lanczos function for eigen vlaues
+m-step Lanczos function for eigen values
 """
 function lanczos(A, x, m)
     q = (x/norm(x))
@@ -51,7 +44,12 @@ function lanczos(A, x, m)
 end
 
 """
-Actual Algorithm Implementataion
+    slq(A, f, m, nv)
+# Arguments
+- `A` : Symmetric Positive Definite Matrix
+- `f` : Function used to compute f(A)
+- `m` : Number of iterations of the Lanczos Algorithm
+- `nv` : Number of different starting unit Rademacher Vectors
 """
 function slq(A::AbstractMatrix, f::Function, m::Int64, nv::Int64)
     if !(isposdef(A))
